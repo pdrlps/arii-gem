@@ -1,11 +1,8 @@
 require_relative "./i2x/version"
+require_relative "./i2x/client"
 
 module I2X
-  # Your code goes here...
-  class Client
+  class Config
 
-  	def self.ping
-  		p 'PONG'
-  	end
   end
 end

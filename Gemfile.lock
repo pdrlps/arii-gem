@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    i2x (0.0.2)
+    i2x (0.0.3)
 
 GEM
   remote: https://rubygems.org/
