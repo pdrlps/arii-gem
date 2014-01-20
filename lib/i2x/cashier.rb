@@ -1,7 +1,8 @@
-require 'slog'
+require 'rest_client'
+require 'open-uri'
 
 
-module Services
+module I2X
   class Cashier
 
 
@@ -18,57 +19,12 @@ module Services
     # - *seed*: seed data (if available)
     #
     def self.verify memory, agent, payload, seed
-      ##
-      # => Redis implementation, use cache.
-      #
+      puts "[i2x][Cashier] verifying\n\taccess token: #{I2X::Config.access_token}\n\thost: #{I2X::Config.host}\n\tmemory: #{memory}\n\tagent: #{agent}\n\tpayload: #{payload}\n\tseed: #{seed}"
       begin
-        
-        # if Redis is enabled...
-        if ENV["CACHE_REDIS"] then          
-          # give me some cache!
-          @redis = Redis.new :host => ENV["CACHE_HOST"], :port => ENV["CACHE_PORT"]
-        end
+        out = RestClient.post "#{I2X::Config.host}fluxcapacitor/verify.json", {:access_token => I2X::Config.access_token, :agent => agent[:identifier], :memory => memory, :payload => payload, :seed => seed}
+        reponse = out[:cache]
       rescue Exception => e
-        Services::Slog.exception e
-      end
-
-      # the actual verification
-      if ENV["CACHE_REDIS"] then
-        # commented, do not log all cache verifications
-        #Services::Slog.debug({:message => "Verifying cache", :module => "Cashier", :task => "cache", :extra => {:agent => agent[:identifier], :memory => memory, :payload => payload, :seed => seed}})
-        begin          
-          if @redis.hexists("#{agent[:identifier]}:#{seed}","#{memory}") then
-            response = {:status => 200, :message => "[i2x][Cashier] Nothing to update"}
-          else
-            @redis.hset("#{agent[:identifier]}:#{seed}", "#{memory}", payload)
-            response = {:status => 100, :message => "[i2x][Cashier] Memory recorded to cache"}
-          end
-        rescue Exception => e
-          response = {:message => "[i2x][Cashier] unable to verify cache content, #{e}", :status => 301}
-          Services::Slog.exception e     
-        end
-      end
-
-      ##
-      # => SQL implementation, use internal database.
-      #
-      # => To Do: Recheck implementation.
-      #
-      if ENV["CACHE_INTERNAL"] then
-        results = Cache.where memory: memory, agent_id: agent.id, seed: seed
-        if results.size == 0 then
-          begin
-            @cached = Cache.new({:memory => memory, :agent_id => agent.id, :payload => payload, :seed => seed})
-            @cached.save
-            response = {:status => 100, :message => "[i2x][Cashier] Memory recorded to cache"}
-          rescue Exception => e
-            response = {:message => "[i2x][Cashier] unable to save new cache content, #{e}", :status => 300}
-            Services::Slog.exception e
-          end
-        else
-          response = {:status => 200, :message => "[i2x][Cashier] Nothing to update"}
-        end
-
+        response = {:status => 400}
       end
 
       response

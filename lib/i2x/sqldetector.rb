@@ -1,4 +1,4 @@
-require 'helper'
+#require 'helper'
 require 'mysql2'
 
 module I2X

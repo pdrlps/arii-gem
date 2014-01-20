@@ -1,8 +1,8 @@
-require 'seedreader'
-require 'csvseedreader'
-require 'sqlseedreader'
-require 'xmlseedreader'
-require 'jsonseedreader'
+#require 'seedreader'
+#require 'csvseedreader'
+#require 'sqlseedreader'
+#require 'xmlseedreader'
+#require 'jsonseedreader'
 
 
 module I2X
@@ -15,12 +15,13 @@ module I2X
   class Detector
     attr_accessor :identifier, :agent, :objects, :payloads, :content
 
-    def initialize identifier
+    def initialize agent
       begin
-        @agent = Agent.find_by! identifier: identifier
+        @agent = agent
         @payloads = Array.new
         @objects = Array.new
         @help = I2X::Helper.new
+        puts "Loaded new detector: #{agent.identifier}"
       rescue Exception => e
         
       end
@@ -31,15 +32,14 @@ module I2X
     # == Start original source detection process
     #
     def checkup
-      # update checkup time
-      @agent.update_check_at @help.datetime
 
       begin
+
 
         ##
         # => Process seed data, if available.
         #
-        if @agent.seeds.size != 0 then
+        unless @agent.seeds.nil? then
           @agent.seeds.each do |seed|
             case seed[:publisher]
             when 'csv'
@@ -73,15 +73,18 @@ module I2X
                 @objects.push read
               end
             rescue Exception => e
-              
+              p "[i2x] error: #{e}"
             end
           end
 
         else
           ##
           # no seeds, simply copy agent data
-          object = @help.deep_copy @agent[:payload]
-          object[:identifier] = @agent[:identifier]
+          #object = @help.deep_copy @agent[:payload]
+          object = @help.deep_copy @agent.payload 
+          #object[:identifier] = @agent[:identifier]
+          object[:identifier] = @agent.identifier
+          object[:cache] = @agent.cache
           object[:seed] = object[:identifier]
           unless self.content.nil? then
             object[:content] = self.content
@@ -90,16 +93,16 @@ module I2X
         end
       rescue Exception => e
         @response = {:status => 404, :message => "[i2x][Detector] failed to load doc, #{e}"}
-        I2X::Slog.exception e
+        p "[i2x] error: #{e}"
       end
 
       begin
         # increase detected events count
-        @agent.increment!(:events_count, @payloads.size)
+        
         @response = { :payload => @payloads, :status => 100}
       rescue Exception => e
         @response = {:status => 404, :message => "[i2x][Detector] failed to process queries, #{e}"}
-        I2X::Slog.exception e
+        p "[i2x] error: #{e}"
       end
       @response
     end

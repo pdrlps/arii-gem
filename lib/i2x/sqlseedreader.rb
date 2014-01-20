@@ -1,4 +1,3 @@
-require 'slog'
 require 'mysql2'
 
 module Services

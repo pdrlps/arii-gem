@@ -1,14 +1,14 @@
-require 'helper'
+#require 'helper'
 require 'open-uri'
 require 'jsonpath'
-require 'rest-client'
+require 'rest_client'
 require 'csv'
 require 'json'
-require 'seedreader'
-require 'csvseedreader'
-require 'sqlseedreader'
-require 'xmlseedreader'
-require 'jsonseedreader'
+#require 'seedreader'
+#require 'csvseedreader'
+#require 'sqlseedreader'
+#require 'xmlseedreader'
+#require 'jsonseedreader'
 
 module I2X
 

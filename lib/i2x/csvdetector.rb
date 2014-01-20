@@ -1,11 +1,11 @@
-require 'helper'
+#require 'helper'
 require 'csv'
 require 'open-uri'
-require 'seedreader'
-require 'csvseedreader'
-require 'sqlseedreader'
-require 'xmlseedreader'
-require 'jsonseedreader'
+#require 'seedreader'
+#require 'csvseedreader'
+#require 'sqlseedreader'
+#require 'xmlseedreader'
+#require 'jsonseedreader'
 
 module I2X
 
@@ -22,11 +22,16 @@ module I2X
     #
     def detect object
       begin
+        p "[i2x][CSV] Testing #{object[:uri]}"
         CSV.new(open(object[:uri]), :headers => :first_row).each do |row|
           unless object[:cache].nil? then
+            p "[i2x][CSV] no cache, verifying"
             @cache = Cashier.verify row[object[:cache].to_i], object, row, object[:seed]
           else
+
+            p "[i2x][CSV] with cache, verifying"
             @cache = Cashier.verify row[0], object, row, object[:seed]
+            p @cache
           end
           # The actual processing
           #
@@ -44,10 +49,9 @@ module I2X
           end
         end
       rescue Exception => e
-        I2X::Slog.exception e
+        p "[i2x] error: #{e}"
       end
     end
-
     
   end
 end

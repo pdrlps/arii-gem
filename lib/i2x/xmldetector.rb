@@ -1,8 +1,8 @@
-require 'helper'
-require 'cashier'
+#require 'helper'
+#require 'cashier'
 require 'open-uri'
-require 'raven'
-require 'slog'
+#require 'raven'
+#require 'slog'
 
 module I2X
 

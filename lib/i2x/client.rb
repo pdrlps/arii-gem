@@ -9,9 +9,11 @@ module I2X
 		def initialize config
 			begin
 				@config = config
+				I2X::Config.set_access_token @config[:server][:api_key]
+				I2X::Config.set_host @config[:server][:host]
 				p '[i2x] loaded configuration'
 			rescue Exception => e
-				p '[i2x] Failed to load configuration' + e.to_str
+				puts "[i2x] Failed to load configuration: #{e}"
 			end
 			
 		end
@@ -22,11 +24,10 @@ module I2X
 		def validate
 			begin
 				p '[i2x] launching validation.'
-				@config[:server][:host] << '/' unless @config[:server][:host].ends_with?('/')
-				out = RestClient.post "#{@config[:server][:host]}fluxcapacitor/validate_key.json", {:access_token => @config[:server][:api_key]}	
+				out = RestClient.post "#{I2X::Config.host}fluxcapacitor/validate_key.json", {:access_token => I2X::Config.access_token}	
 				response = {:status => 100, :response => out.to_str}
 			rescue Exception => e
-				p '[i2x] validation failed. ' + e.to_str
+				p "[i2x] Failed validation: #{e}"
 			end
 			response
 		end
@@ -38,10 +39,10 @@ module I2X
 			begin
 				@config[:agents].each do |agent|
 					a = I2X::Agent.new agent
-					p "Agent #{a.payload}"
+					a.execute
 				end
 			rescue Exception => e
-				p '[i2x] agent processing failed. ' + e.to_str
+				p "[i2x] Failed agent processing: #{e}"
 			end
 		end
 	end
