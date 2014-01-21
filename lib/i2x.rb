@@ -1,3 +1,4 @@
+require 'logger'
 require 'i2x/cashier'
 require 'i2x/helper'
 require 'i2x/detector'
@@ -12,6 +13,10 @@ require 'i2x/client'
 module I2X
 	class Config
 
+		def self.set_log log
+			@@log = log
+		end
+
 		def self.set_host host
 			host << '/' unless host.end_with?('/')
 			@@host = host
@@ -19,6 +24,10 @@ module I2X
 
 		def self.set_access_token api_key
 			@@access_token = api_key
+		end
+
+		def self.log
+			@@log
 		end
 
 		def self.host

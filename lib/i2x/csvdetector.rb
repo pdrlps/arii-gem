@@ -1,11 +1,5 @@
-#require 'helper'
 require 'csv'
 require 'open-uri'
-#require 'seedreader'
-#require 'csvseedreader'
-#require 'sqlseedreader'
-#require 'xmlseedreader'
-#require 'jsonseedreader'
 
 module I2X
 
@@ -21,25 +15,33 @@ module I2X
     # == Detect the changes
     #
     def detect object
-      begin
-        p "[i2x][CSV] Testing #{object[:uri]}"
-        CSV.new(open(object[:uri]), :headers => :first_row).each do |row|
-          unless object[:cache].nil? then
-            p "[i2x][CSV] no cache, verifying"
-            @cache = Cashier.verify row[object[:cache].to_i], object, row, object[:seed]
-          else
 
-            p "[i2x][CSV] with cache, verifying"
+      I2X::Config.log.debug(self.class.name) {"Monitoring #{object[:uri]}"}
+      CSV.new(open(object[:uri]), :headers => :first_row).each do |row|
+        begin
+          unless object[:cache].nil? then
+            @response = Cashier.verify row[object[:cache].to_i], object, row, object[:seed]            
+          else
             @cache = Cashier.verify row[0], object, row, object[:seed]
-            p @cache
+          end
+        rescue Exception => e
+          I2X::Config.log.error(self.class.name) {"Loading error: #{e}"}
+        end
+
+        begin
+
+          @cache = JSON.parse(@response, {:symbolize_names => true})
+          @cache[:templates].each do |t|
+            @templates.push t
           end
           # The actual processing
           #
-          if @cache[:status] == 100 then
-
-            # add row data to payload from selectors (key => key, value => column name)
+          if @cache[:cache][:status] == 100 then
+            I2X::Config.log.info(self.class.name) {"Not on cache, generating payload"}
+            
             payload = Hash.new
-            JSON.parse(object[:selectors]).each do |selector|
+            
+            object[:selectors].each do |selector|
               selector.each do |k,v|
                 payload[k] = row[v.to_i]
               end
@@ -47,11 +49,12 @@ module I2X
             # add payload object to payloads list
             @payloads.push payload
           end
+
+        rescue Exception => e
+          I2X::Config.log.error(self.class.name) {"Processing error: #{e}"}
         end
-      rescue Exception => e
-        p "[i2x] error: #{e}"
+        @cache[:templates]
       end
     end
-    
   end
 end
