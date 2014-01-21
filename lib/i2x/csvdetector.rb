@@ -22,7 +22,7 @@ module I2X
           unless object[:cache].nil? then
             @response = Cashier.verify row[object[:cache].to_i], object, row, object[:seed]            
           else
-            @cache = Cashier.verify row[0], object, row, object[:seed]
+            @response = Cashier.verify row[0], object, row, object[:seed]
           end
         rescue Exception => e
           I2X::Config.log.error(self.class.name) {"Loading error: #{e}"}
@@ -30,9 +30,12 @@ module I2X
 
         begin
 
+          # Process i2xcache response
           @cache = JSON.parse(@response, {:symbolize_names => true})
-          @cache[:templates].each do |t|
-            @templates.push t
+          unless @cache[:templates].nil? then
+            @cache[:templates].each do |t|
+              @templates.push t
+            end
           end
           # The actual processing
           #

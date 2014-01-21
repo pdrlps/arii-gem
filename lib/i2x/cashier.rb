@@ -15,7 +15,7 @@ module I2X
     # - *seed*: seed data (if available)
     #
     def self.verify cache, agent, payload, seed
-      #puts "[i2x][Cashier] verifying\n\taccess token: #{I2X::Config.access_token}\n\thost: #{I2X::Config.host}\n\tcache: #{cache}\n\tagent: #{agent}\n\tpayload: #{payload}\n\tseed: #{seed}"
+      I2X::Config.log.info(self.class.name) {"Verifying\n\taccess token: #{I2X::Config.access_token}\n\thost: #{I2X::Config.host}\n\tcache: #{cache}\n\tagent: #{agent}\n\tpayload: #{payload}\tseed: #{seed}"}
       begin
         response = RestClient.post "#{I2X::Config.host}fluxcapacitor/verify.json", {:access_token => I2X::Config.access_token, :agent => agent[:identifier], :cache => cache, :payload => payload, :seed => seed}
       rescue Exception => e

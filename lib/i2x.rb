@@ -13,6 +13,8 @@ require 'i2x/client'
 module I2X
 	class Config
 
+
+
 		def self.set_log log
 			@@log = log
 		end

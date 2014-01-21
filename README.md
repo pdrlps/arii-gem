@@ -1,8 +1,6 @@
-# I2X
+# i2x gem
 
-### Automated real-time integration
-
-Ruby gem for distributed client agents.
+Ruby `gem` for distributed client agents. This enables launching custom **i2x** agents.
 
 ## Installation
 
@@ -20,7 +18,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+- Check **i2x**'s [client](http://github.com/pdrlps/i2x-client)
+
+## Changelog
+
+- 2014-01-21: release 0.1
 
 ## Contributing
 
