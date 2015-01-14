@@ -1,12 +1,12 @@
-# i2x gem
+# ARiiP gem
 
-Ruby `gem` for distributed client agents. This enables launching custom **i2x** agents.
+Ruby `gem` for distributed client agents. This enables launching custom **ARiiP** agents.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'i2x'
+    gem 'arii'
 
 And then execute:
 
@@ -14,19 +14,19 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install i2x
+    $ gem install arii
 
 ## Usage
 
-- Check **i2x**'s [client](http://github.com/pdrlps/i2x-client)
+- Check **ARiiP**'s [client](http://github.com/pdrlps/arii-client)
 
 ## Changelog
 
-- 2014-01-21: release 0.1
+- 2015-01-14: Reload as arii-gem
 
 ## Contributing
 
-1. Fork it ( http://github.com/pdrlps/i2x-gem/fork )
+1. Fork it ( http://github.com/pdrlps/arii-gem/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
