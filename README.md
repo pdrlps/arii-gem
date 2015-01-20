@@ -1,6 +1,6 @@
 # ARiiP gem
 
-Ruby `gem` for distributed client agents. This enables launching custom **ARiiP** agents.
+Ruby `gem` for distributed client agents. This enables launching custom **ARiiP** agents. Full information on [RubyGems](https://rubygems.org/gems/arii).
 
 ## Installation
 
@@ -21,6 +21,8 @@ Or install it yourself as:
 - Check **ARiiP**'s [client](http://github.com/pdrlps/arii-client)
 
 ## Changelog
+
+- 2015-01-20: Published to RubyGems - https://rubygems.org/gems/arii
 
 - 2015-01-14: Reload as arii-gem
 

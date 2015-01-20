@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'arii/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ARiiP"
+  spec.name          = "arii"
   spec.version       = ARII::VERSION
   spec.authors       = ["Pedro Lopes"]
   spec.email         = ["hello@pedrolopes.net"]
