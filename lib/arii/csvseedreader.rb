@@ -1,12 +1,12 @@
-require 'json'
+require 'csv'
 
-module I2X
+module ARII
 
-  # = JSONSeedReader
+  # = CSVSeedReader
   #
-  # Load content from JSON seed.
+  # Load content from CSV seed.
   #
-  class JSONSeedReader < SeedReader
+  class CSVSeedReader < SeedReader
     ##
     # == Read
     #
@@ -14,36 +14,31 @@ module I2X
     #
     def read
       begin
-        url = RestClient.get @seed[:payload][:uri]
-        @doc = url.to_str
-        JsonPath.on(@doc,@seed[:payload][:query]).each do |element|
-
+        CSV.new(open(@seed[:payload][:uri]), :headers => :first_row).each do |row|
           begin
             object = @help.deep_copy @agent[:payload]
             object.each_pair do |key,value|
               variables = @help.identify_variables(object[key])
               variables.each do |v|
-
-                JsonPath.on(element, @seed[:payload][:selectors][v]).each do |el|
-                
-                  object[key].gsub!("%{#{v}}", el.to_s)
-                end
+                object[key].gsub!("%{#{v}}", row[@seed[:payload][:selectors][v].to_i])
               end
             end
 
-            JsonPath.on(element,@seed[:payload][:cache]).each do |el|
-              object[:seed] = el
-
+            unless @seed[:payload][:cache].nil? then
+            	object[:seed] = row[@seed[:payload][:cache].to_i]
+            else
+            	object[:seed] = row[0]
             end
+
 
             object[:identifier] = @agent.identifier
             @objects.push object
           rescue Exception => e
-            
+
           end
         end
       rescue Exception => e
-        
+
       end
 
       @objects

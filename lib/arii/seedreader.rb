@@ -1,6 +1,6 @@
 #require 'helper'
 
-module I2X
+module ARII
 
   ##
   # = Seed Reader
@@ -12,7 +12,7 @@ module I2X
 
   	 def initialize agent, seed
   	 	@agent = agent
-  	 	@help = I2X::Helper.new
+  	 	@help = ARII::Helper.new
   	 	@seed = seed
   	 	@objects = Array.new
   	 	puts "\t\tSeed: #{@seed[:identifier]}"

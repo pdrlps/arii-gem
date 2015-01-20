@@ -1,7 +1,7 @@
 require 'rest_client'
 
-module I2X
-  class Agent 
+module ARII
+  class Agent
     attr_accessor :content, :identifier, :publisher, :payload, :templates, :seeds, :cache, :selectors
 
     def initialize agent
@@ -12,9 +12,9 @@ module I2X
         @cache = agent[:payload][:cache]
         @seeds = agent[:seeds]
         @selectors = agent[:payload][:selectors]
-        I2X::Config.log.debug(self.class.name) {"Agent #{@identifier} initialized"}
+        ARII::Config.log.debug(self.class.name) {"Agent #{@identifier} initialized"}
       rescue Exception => e
-        I2X::Config.log.error(self.class.name) {"Unable to initialize agent. #{e}"}
+        ARII::Config.log.error(self.class.name) {"Unable to initialize agent. #{e}"}
       end
 
     end
@@ -29,31 +29,31 @@ module I2X
       case @publisher
       when 'sql'
         begin
-          @d = I2X::SQLDetector.new(self)
+          @d = ARII::SQLDetector.new(self)
         rescue Exception => e
           @response = {:status => 400, :error => e}
-          I2X::Config.log.error(self.class.name) {"#{e}"}
+          ARII::Config.log.error(self.class.name) {"#{e}"}
         end
       when 'csv'
         begin
-          @d = I2X::CSVDetector.new(self)
+          @d = ARII::CSVDetector.new(self)
         rescue Exception => e
           @response = {:status => 400, :error => e}
-          I2X::Config.log.error(self.class.name) {"#{e}"}
+          ARII::Config.log.error(self.class.name) {"#{e}"}
         end
       when 'xml'
         begin
-          @d = I2X::XMLDetector.new(self)
+          @d = ARII::XMLDetector.new(self)
         rescue Exception => e
           @response = {:status => 400, :error => e}
-          I2X::Config.log.error(self.class.name) {"#{e}"}
+          ARII::Config.log.error(self.class.name) {"#{e}"}
         end
       when 'json'
         begin
-          @d = I2X::JSONDetector.new(self)
+          @d = ARII::JSONDetector.new(self)
         rescue Exception => e
           @response = {:status => 400, :error => e}
-          I2X::Config.log.error(self.class.name) {"#{e}"}
+          ARII::Config.log.error(self.class.name) {"#{e}"}
         end
       end
 
@@ -65,7 +65,7 @@ module I2X
           end
           @checkup = @d.checkup
         rescue Exception => e
-          I2X::Config.log.error(self.class.name) {"Checkup error: #{e}"}
+          ARII::Config.log.error(self.class.name) {"Checkup error: #{e}"}
         end
 
         # Start detection
@@ -76,7 +76,7 @@ module I2X
 
           @checkup[:templates] = @d.templates.uniq
         rescue Exception => e
-          I2X::Config.log.error(self.class.name) {"Detection error: #{e}"}
+          ARII::Config.log.error(self.class.name) {"Detection error: #{e}"}
         end
 
         begin
@@ -84,9 +84,9 @@ module I2X
             process @checkup
           end
         rescue Exception => e
-          I2X::Config.log.error(self.class.name) {"Process error: #{e}"}
+          ARII::Config.log.error(self.class.name) {"Process error: #{e}"}
         end
-        response = {:status => @checkup[:status], :message => "[i2x][Checkup][execute] All OK."}     
+        response = {:status => @checkup[:status], :message => "[ARII][Checkup][execute] All OK."}
       end
 
 
@@ -97,22 +97,22 @@ module I2X
       def process checkup
         begin
           checkup[:templates].each do |template|
-            I2X::Config.log.info(self.class.name) {"Delivering to #{template} template."}
+            ARII::Config.log.info(self.class.name) {"Delivering to #{template} template."}
             checkup[:payload].each do |payload|
-              I2X::Config.log.debug(self.class.name) {"Processing #{payload}."}
-              response = RestClient.post "#{I2X::Config.host}postman/deliver/#{template}.js", payload
+              ARII::Config.log.debug(self.class.name) {"Processing #{payload}."}
+              response = RestClient.post "#{ARII::Config.host}postman/deliver/#{template}.js", payload
               case response.code
               when 200
 
               else
-                I2X::Config.log.warn(self.class.name) {"unable to deliver \"#{payload}\" to \"#{template}\""}
+                ARII::Config.log.warn(self.class.name) {"unable to deliver \"#{payload}\" to \"#{template}\""}
               end
             end
           end
         rescue Exception => e
-          I2X::Config.log.error(self.class.name) {"Processing error: #{e}"}
+          ARII::Config.log.error(self.class.name) {"Processing error: #{e}"}
         end
-        
+
       end
     end
 

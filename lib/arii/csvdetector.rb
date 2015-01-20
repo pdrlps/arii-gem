@@ -1,7 +1,7 @@
 require 'csv'
 require 'open-uri'
 
-module I2X
+module ARII
 
   ##
   # = CSVDetector
@@ -16,21 +16,21 @@ module I2X
     #
     def detect object
 
-      I2X::Config.log.debug(self.class.name) {"Monitoring #{object[:uri]}"}
+      ARII::Config.log.debug(self.class.name) {"Monitoring #{object[:uri]}"}
       CSV.new(open(object[:uri]), :headers => :first_row).each do |row|
         begin
           unless object[:cache].nil? then
-            @response = Cashier.verify row[object[:cache].to_i], object, row, object[:seed]            
+            @response = Cashier.verify row[object[:cache].to_i], object, row, object[:seed]
           else
             @response = Cashier.verify row[0], object, row, object[:seed]
           end
         rescue Exception => e
-          I2X::Config.log.error(self.class.name) {"Loading error: #{e}"}
+          ARII::Config.log.error(self.class.name) {"Loading error: #{e}"}
         end
 
         begin
 
-          # Process i2xcache response
+          # Process ARIIcache response
           @cache = JSON.parse(@response, {:symbolize_names => true})
           unless @cache[:templates].nil? then
             @cache[:templates].each do |t|
@@ -40,10 +40,10 @@ module I2X
           # The actual processing
           #
           if @cache[:cache][:status] == 100 then
-            I2X::Config.log.info(self.class.name) {"Not on cache, generating payload"}
-            
+            ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
+
             payload = Hash.new
-            
+
             object[:selectors].each do |selector|
               selector.each do |k,v|
                 payload[k] = row[v.to_i]
@@ -54,7 +54,7 @@ module I2X
           end
 
         rescue Exception => e
-          I2X::Config.log.error(self.class.name) {"Processing error: #{e}"}
+          ARII::Config.log.error(self.class.name) {"Processing error: #{e}"}
         end
         @cache[:templates]
       end

@@ -1,16 +1,16 @@
 require 'logger'
-require 'i2x/cashier'
-require 'i2x/helper'
-require 'i2x/detector'
-require 'i2x/csvdetector'
-require 'i2x/jsondetector'
-require 'i2x/sqldetector'
-require 'i2x/xmldetector'
-require 'i2x/agent'
-require 'i2x/version'
-require 'i2x/client'
+require 'arii/cashier'
+require 'arii/helper'
+require 'arii/detector'
+require 'arii/csvdetector'
+require 'arii/jsondetector'
+require 'arii/sqldetector'
+require 'arii/xmldetector'
+require 'arii/agent'
+require 'arii/version'
+require 'arii/client'
 
-module I2X
+module ARII
 	class Config
 
 

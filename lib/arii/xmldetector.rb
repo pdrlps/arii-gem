@@ -1,6 +1,6 @@
 require 'open-uri'
 
-module I2X
+module ARII
 
   # = XMLDetector
   #
@@ -13,7 +13,7 @@ module I2X
     # == Detect the changes
     #
     def detect object
-      I2X::Config.log.info(self.class.name) {"Monitoring #{object[:uri]}"} unless object[:uri].nil?
+      ARII::Config.log.info(self.class.name) {"Monitoring #{object[:uri]}"} unless object[:uri].nil?
       begin
         if object[:uri] == '' then
           @doc = Nokogiri::XML(object[:content])
@@ -26,7 +26,7 @@ module I2X
             @response = Cashier.verify c.content, object, c.content, object[:seed]
           end
 
-          # Process i2x cache response
+          # Process ARII cache response
           @cache = JSON.parse(@response, {:symbolize_names => true})
           unless @cache[:templates].nil? then
             @cache[:templates].each do |t|
@@ -38,7 +38,7 @@ module I2X
           # If not on cache, add to payload for processing
           #
           if @cache[:status] == 100 then
-            I2X::Config.log.info(self.class.name) {"Not on cache, generating payload"}
+            ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
             # add row data to payload from selectors (key => key, value => column name)
             payload = Hash.new
             object[:selectors].each do |selector|
@@ -56,7 +56,7 @@ module I2X
         end
       end
     rescue Exception => e
-      I2X::Config.log.error(self.class.name) {"Processing error: #{e}"}
+      ARII::Config.log.error(self.class.name) {"Processing error: #{e}"}
     end
   end
 end

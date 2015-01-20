@@ -5,7 +5,7 @@
 #require 'jsonseedreader'
 
 
-module I2X
+module ARII
 
   ##
   # = Detector
@@ -20,10 +20,10 @@ module I2X
         @agent = agent
         @payloads = Array.new
         @objects = Array.new
-        @help = I2X::Helper.new
-        I2X::Config.log.info(self.class.name) {"Started new #{agent.identifier} detector"}
+        @help = ARII::Helper.new
+        ARII::Config.log.info(self.class.name) {"Started new #{agent.identifier} detector"}
       rescue Exception => e
-        I2X::Config.log.error(self.class.name) {"#{e}"}
+        ARII::Config.log.error(self.class.name) {"#{e}"}
       end
     end
 
@@ -44,27 +44,27 @@ module I2X
             case seed[:publisher]
             when 'csv'
               begin
-                @sr = I2X::CSVSeedReader.new(@agent, seed)
+                @sr = ARII::CSVSeedReader.new(@agent, seed)
               rescue Exception => e
-                I2X::Config.log.error(self.class.name) {"#{e}"}
+                ARII::Config.log.error(self.class.name) {"#{e}"}
               end
             when 'sql'
               begin
-                @sr = I2X::SQLSeedReader.new(@agent, seed)
+                @sr = ARII::SQLSeedReader.new(@agent, seed)
               rescue Exception => e
-                I2X::Config.log.error(self.class.name) {"#{e}"}
+                ARII::Config.log.error(self.class.name) {"#{e}"}
               end
             when 'xml'
               begin
-                @sr = I2X::XMLSeedReader.new(@agent, seed)
+                @sr = ARII::XMLSeedReader.new(@agent, seed)
               rescue Exception => e
-                I2X::Config.log.error(self.class.name) {"#{e}"}
+                ARII::Config.log.error(self.class.name) {"#{e}"}
               end
             when 'json'
               begin
-                @sr = I2X::JSONSeedReader.new(@agent, seed)
+                @sr = ARII::JSONSeedReader.new(@agent, seed)
               rescue Exception => e
-                I2X::Config.log.error(self.class.name) {"#{e}"}
+                ARII::Config.log.error(self.class.name) {"#{e}"}
               end
             end
             begin
@@ -73,14 +73,14 @@ module I2X
                 @objects.push read
               end
             rescue Exception => e
-              I2X::Config.log.error(self.class.name) {"#{e}"}
+              ARII::Config.log.error(self.class.name) {"#{e}"}
             end
           end
 
         else
           ##
           # no seeds, simply copy agent data
-          object = @help.deep_copy @agent.payload 
+          object = @help.deep_copy @agent.payload
           object[:identifier] = @agent.identifier
           object[:cache] = @agent.cache
           object[:seed] = object[:identifier]
@@ -91,8 +91,8 @@ module I2X
           @objects.push object
         end
       rescue Exception => e
-        @response = {:status => 404, :message => "[i2x][Detector] failed to load doc, #{e}"}
-        I2X::Config.log.error(self.class.name) {"#{e}"}
+        @response = {:status => 404, :message => "[ARII][Detector] failed to load doc, #{e}"}
+        ARII::Config.log.error(self.class.name) {"#{e}"}
       end
 
       begin
@@ -102,12 +102,12 @@ module I2X
         @templates = Array.new
         @response = { :payload => @payloads, :templates => @templates, :status => 100}
       rescue Exception => e
-        @response = {:status => 404, :message => "[i2x][Detector] failed to process queries, #{e}"}
-        I2X::Config.log.error(self.class.name) {"#{e}"}
+        @response = {:status => 404, :message => "[ARII][Detector] failed to process queries, #{e}"}
+        ARII::Config.log.error(self.class.name) {"#{e}"}
       end
       @response
     end
-    
+
 
   end
 end

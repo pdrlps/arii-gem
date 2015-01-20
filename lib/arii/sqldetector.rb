@@ -1,7 +1,7 @@
 #require 'helper'
 require 'mysql2'
 
-module I2X
+module ARII
 
   ##
   # = SQLDetector
@@ -15,7 +15,7 @@ module I2X
     # == Detect the changes
     #
     def detect object
-      I2X::Config.log.debug(self.class.name) {"Monitoring #{object[:host]}"}
+      ARII::Config.log.debug(self.class.name) {"Monitoring #{object[:host]}"}
       begin
         @client = Mysql2::Client.new(:host => object[:host], :username => object[:username] , :password => object[:password] , :database => object[:database])
         @client.query(@agent[:payload][:query]).each(:symbolize_keys => false) do |row|
@@ -25,7 +25,7 @@ module I2X
             @response = Cashier.verify row["id"], object, row, object[:seed]
           end
 
-          # Process i2x cache response
+          # Process ARII cache response
           @cache = JSON.parse(@response, {:symbolize_names => true})
           unless @cache[:templates].nil? then
             @cache[:templates].each do |t|
@@ -36,7 +36,7 @@ module I2X
           # The actual processing
           #
           if @cache[:status] == 100 then
-           I2X::Config.log.info(self.class.name) {"Not on cache, generating payload"}
+           ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
             # add row data to payload from selectors (key => key, value => column name)
             payload = Hash.new
             object[:selectors].each do |selector|
@@ -49,7 +49,7 @@ module I2X
           end
         end
       rescue Exception => e
-        I2X::Config.log.error(self.class.name) {"Processing error: #{e}"}
+        ARII::Config.log.error(self.class.name) {"Processing error: #{e}"}
       end
       @cache[:templates]
     end

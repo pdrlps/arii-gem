@@ -1,5 +1,5 @@
 
-module I2X
+module ARII
 
   ##
   # = Helper Class
@@ -11,7 +11,7 @@ module I2X
 
     def initialize
       # load each helper function into a map for replacement in the delivery
-      @replacements = [ ["%{i2x.date}", self.date], ["%{i2x.datetime}", self.datetime], ["%{i2x.hostname}", self.hostname]]
+      @replacements = [ ["%{ARII.date}", self.date], ["%{ARII.datetime}", self.datetime], ["%{ARII.hostname}", self.hostname]]
     end
 
     public
@@ -41,7 +41,7 @@ module I2X
           results.push m[0]
         end
       rescue Exception => e
-        
+
       end
 
       results
@@ -93,7 +93,7 @@ module I2X
           end
         end
       rescue Exception => e
-        
+
       end
       valid
     end
@@ -117,7 +117,7 @@ module I2X
           valid = false
         end
       rescue Exception => e
-        
+
       end
 
       valid
@@ -133,7 +133,7 @@ module I2X
       begin
         valid = self.validate_seed(agent[:publisher], agent[:payload]) && self.validate_payload(agent[:publisher], agent[:payload])
       rescue Exception => e
-        
+
       end
 
       valid

@@ -1,9 +1,9 @@
 require_relative '../../test_helper'
- 
-describe I2X do
- 
+
+describe ARII do
+
   it "must be defined" do
-    I2X::VERSION.wont_be_nil
+    ARII::VERSION.wont_be_nil
   end
- 
+
 end

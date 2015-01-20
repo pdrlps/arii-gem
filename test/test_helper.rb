@@ -1,4 +1,4 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 
-require File.expand_path('../../lib/i2x.rb', __FILE__)
+require File.expand_path('../../lib/arii.rb', __FILE__)

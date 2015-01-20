@@ -1,4 +1,4 @@
-module I2X
+module ARII
 
   # = XMLSeedReader
   #
@@ -39,11 +39,11 @@ module I2X
             object[:identifier] = @agent.identifier
             @objects.push object
           rescue Exception => e
-            
+
           end
         end
       rescue Exception => e
-        
+
       end
 
       @objects

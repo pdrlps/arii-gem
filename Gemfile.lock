@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    i2x (0.0.3)
+    arii (0.0.3)
 
 GEM
   remote: https://rubygems.org/
@@ -13,5 +13,5 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.5)
-  i2x!
+  arii!
   rake
