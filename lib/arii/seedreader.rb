@@ -15,7 +15,7 @@ module ARII
   	 	@help = ARII::Helper.new
   	 	@seed = seed
   	 	@objects = Array.new
-  	 	puts "\t\tSeed: #{@seed[:identifier]}"
+  	 	# puts "\t\tSeed: #{@seed[:identifier]}"
   	 end
   end
 end

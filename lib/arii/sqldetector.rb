@@ -18,7 +18,7 @@ module ARII
       ARII::Config.log.debug(self.class.name) {"Monitoring #{object[:host]}"}
       begin
         @client = Mysql2::Client.new(:host => object[:host], :username => object[:username] , :password => object[:password] , :database => object[:database])
-        @client.query(@agent[:payload][:query]).each(:symbolize_keys => false) do |row|
+        @client.query(object[:query]).each(:symbolize_keys => false) do |row|
           unless object[:cache].nil? then
             @response = Cashier.verify row[object[:cache]], object, row, object[:seed]
           else
@@ -32,11 +32,10 @@ module ARII
               @templates.push t
             end
           end
-
           # The actual processing
           #
-          if @cache[:status] == 100 then
-           ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
+          if @cache[:cache][:status] == 100 then
+            ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
             # add row data to payload from selectors (key => key, value => column name)
             payload = Hash.new
             object[:selectors].each do |selector|

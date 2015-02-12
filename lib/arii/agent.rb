@@ -103,7 +103,7 @@ module ARII
               response = RestClient.post "#{ARII::Config.host}postman/deliver/#{template}.js", payload
               case response.code
               when 200
-
+                ARII::Config.log.debug(self.class.name) {"Delivered to #{template}."}
               else
                 ARII::Config.log.warn(self.class.name) {"unable to deliver \"#{payload}\" to \"#{template}\""}
               end

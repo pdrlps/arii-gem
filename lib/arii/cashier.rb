@@ -15,7 +15,7 @@ module ARII
     # - *seed*: seed data (if available)
     #
     def self.verify cache, agent, payload, seed
-      ARII::Config.log.info(self.class.name) {"Verifying\n\taccess token: #{ARII::Config.access_token}\n\thost: #{ARII::Config.host}\n\tcache: #{cache}\n\tagent: #{agent}\n\tpayload: #{payload}\tseed: #{seed}"}
+      #ARII::Config.log.info(self.class.name) {"Verifying\n\taccess token: #{ARII::Config.access_token}\n\thost: #{ARII::Config.host}\n\tcache: #{cache}\n\tagent: #{agent}\n\tpayload: #{payload}\n\tseed: #{seed}"}
       begin
         response = RestClient.post "#{ARII::Config.host}fluxcapacitor/verify.json", {:access_token => ARII::Config.access_token, :agent => agent[:identifier], :cache => cache, :payload => payload, :seed => seed}
       rescue Exception => e

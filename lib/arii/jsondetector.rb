@@ -42,7 +42,7 @@ module ARII
           ##
           # If not on cache, add to payload for processing
           #
-          if @cache[:status] == 100 then
+          if @cache[:cache][:status] == 100 then
             ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
             # add row data to payload from selectors (key => key, value => column name)
             payload = Hash.new
