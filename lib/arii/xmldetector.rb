@@ -13,7 +13,7 @@ module ARII
     # == Detect the changes
     #
     def detect object
-      ARII::Config.log.info(self.class.name) {"Monitoring #{object[:uri]}"} unless object[:uri].nil?
+      ARII::Config.log.info(self.class.name) { "Monitoring #{object[:uri]}" } unless object[:uri].nil?
       begin
         if object[:uri] == '' then
           @doc = Nokogiri::XML(object[:content])
@@ -38,12 +38,12 @@ module ARII
           # If not on cache, add to payload for processing
           #
           if @cache[:cache][:status] == 100 then
-            ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
+            ARII::Config.log.info(self.class.name) { "Not on cache, generating payload" }
             # add row data to payload from selectors (key => key, value => column name)
             payload = Hash.new
             object[:selectors].each do |selector|
 
-              selector.each do |k,v|
+              selector.each do |k, v|
                 element.xpath(v).each do |el|
                   payload[k] = el.content
                 end
@@ -56,7 +56,7 @@ module ARII
         end
       end
     rescue Exception => e
-      ARII::Config.log.error(self.class.name) {"Processing error: #{e}"}
+      ARII::Config.log.error(self.class.name) { "Processing error: #{e}" }
     end
   end
 end

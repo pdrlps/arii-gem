@@ -17,7 +17,7 @@ module ARII
         CSV.new(open(@seed[:payload][:uri]), :headers => :first_row).each do |row|
           begin
             object = @help.deep_copy @agent[:payload]
-            object.each_pair do |key,value|
+            object.each_pair do |key, value|
               variables = @help.identify_variables(object[key])
               variables.each do |v|
                 object[key].gsub!("%{#{v}}", row[@seed[:payload][:selectors][v].to_i])
@@ -25,9 +25,9 @@ module ARII
             end
 
             unless @seed[:payload][:cache].nil? then
-            	object[:seed] = row[@seed[:payload][:cache].to_i]
+              object[:seed] = row[@seed[:payload][:cache].to_i]
             else
-            	object[:seed] = row[0]
+              object[:seed] = row[0]
             end
 
 

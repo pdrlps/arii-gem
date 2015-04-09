@@ -16,7 +16,7 @@ module ARII
     #
     def detect object
 
-      ARII::Config.log.debug(self.class.name) {"Monitoring #{object[:uri]}"}
+      ARII::Config.log.debug(self.class.name) { "Monitoring #{object[:uri]}" }
       CSV.new(open(object[:uri]), :headers => :first_row).each do |row|
         begin
           unless object[:cache].nil? then
@@ -25,7 +25,7 @@ module ARII
             @response = Cashier.verify row[0], object, row, object[:seed]
           end
         rescue Exception => e
-          ARII::Config.log.error(self.class.name) {"Loading error: #{e}"}
+          ARII::Config.log.error(self.class.name) { "Loading error: #{e}" }
         end
 
         begin
@@ -40,12 +40,12 @@ module ARII
           # The actual processing
           #
           if @cache[:cache][:status] == 100 then
-            ARII::Config.log.info(self.class.name) {"Not on cache, generating payload"}
+            ARII::Config.log.info(self.class.name) { "Not on cache, generating payload" }
 
             payload = Hash.new
 
             object[:selectors].each do |selector|
-              selector.each do |k,v|
+              selector.each do |k, v|
                 payload[k] = row[v.to_i]
               end
             end
@@ -54,7 +54,7 @@ module ARII
           end
 
         rescue Exception => e
-          ARII::Config.log.error(self.class.name) {"Processing error: #{e}"}
+          ARII::Config.log.error(self.class.name) { "Processing error: #{e}" }
         end
         @cache[:templates]
       end

@@ -21,9 +21,9 @@ module ARII
         @payloads = Array.new
         @objects = Array.new
         @help = ARII::Helper.new
-        ARII::Config.log.info(self.class.name) {"Started new #{agent.identifier} detector"}
+        ARII::Config.log.info(self.class.name) { "Started new #{agent.identifier} detector" }
       rescue Exception => e
-        ARII::Config.log.error(self.class.name) {"#{e}"}
+        ARII::Config.log.error(self.class.name) { "#{e}" }
       end
     end
 
@@ -42,30 +42,30 @@ module ARII
         unless @agent.seeds.nil? then
           @agent.seeds.each do |seed|
             case seed[:publisher]
-            when 'csv'
-              begin
-                @sr = ARII::CSVSeedReader.new(@agent, seed)
-              rescue Exception => e
-                ARII::Config.log.error(self.class.name) {"#{e}"}
-              end
-            when 'sql'
-              begin
-                @sr = ARII::SQLSeedReader.new(@agent, seed)
-              rescue Exception => e
-                ARII::Config.log.error(self.class.name) {"#{e}"}
-              end
-            when 'xml'
-              begin
-                @sr = ARII::XMLSeedReader.new(@agent, seed)
-              rescue Exception => e
-                ARII::Config.log.error(self.class.name) {"#{e}"}
-              end
-            when 'json'
-              begin
-                @sr = ARII::JSONSeedReader.new(@agent, seed)
-              rescue Exception => e
-                ARII::Config.log.error(self.class.name) {"#{e}"}
-              end
+              when 'csv'
+                begin
+                  @sr = ARII::CSVSeedReader.new(@agent, seed)
+                rescue Exception => e
+                  ARII::Config.log.error(self.class.name) { "#{e}" }
+                end
+              when 'sql'
+                begin
+                  @sr = ARII::SQLSeedReader.new(@agent, seed)
+                rescue Exception => e
+                  ARII::Config.log.error(self.class.name) { "#{e}" }
+                end
+              when 'xml'
+                begin
+                  @sr = ARII::XMLSeedReader.new(@agent, seed)
+                rescue Exception => e
+                  ARII::Config.log.error(self.class.name) { "#{e}" }
+                end
+              when 'json'
+                begin
+                  @sr = ARII::JSONSeedReader.new(@agent, seed)
+                rescue Exception => e
+                  ARII::Config.log.error(self.class.name) { "#{e}" }
+                end
             end
             begin
               @reads = @sr.read
@@ -73,7 +73,7 @@ module ARII
                 @objects.push read
               end
             rescue Exception => e
-              ARII::Config.log.error(self.class.name) {"#{e}"}
+              ARII::Config.log.error(self.class.name) { "#{e}" }
             end
           end
 
@@ -92,7 +92,7 @@ module ARII
         end
       rescue Exception => e
         @response = {:status => 404, :message => "[ARII][Detector] failed to load doc, #{e}"}
-        ARII::Config.log.error(self.class.name) {"#{e}"}
+        ARII::Config.log.error(self.class.name) { "#{e}" }
       end
 
       begin
@@ -100,10 +100,10 @@ module ARII
 
 
         @templates = Array.new
-        @response = { :payload => @payloads, :templates => @templates, :status => 100}
+        @response = {:payload => @payloads, :templates => @templates, :status => 100}
       rescue Exception => e
         @response = {:status => 404, :message => "[ARII][Detector] failed to process queries, #{e}"}
-        ARII::Config.log.error(self.class.name) {"#{e}"}
+        ARII::Config.log.error(self.class.name) { "#{e}" }
       end
       @response
     end

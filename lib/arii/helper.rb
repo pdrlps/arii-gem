@@ -1,4 +1,3 @@
-
 module ARII
 
   ##
@@ -11,7 +10,7 @@ module ARII
 
     def initialize
       # load each helper function into a map for replacement in the delivery
-      @replacements = [ ["%{ARII.date}", self.date], ["%{ARII.datetime}", self.datetime], ["%{ARII.hostname}", self.hostname]]
+      @replacements = [["%{ARII.date}", self.date], ["%{ARII.datetime}", self.datetime], ["%{ARII.hostname}", self.hostname]]
     end
 
     public
@@ -55,42 +54,42 @@ module ARII
     # + *payload* - content for validation
     #
     def self.validate_payload publisher, payload
-      @database_servers = ["mysql","sqlite","postgresql"]
+      @database_servers = ["mysql", "sqlite", "postgresql"]
       valid = true
 
       begin
         case publisher
-        when 'csv', 'xml', 'json', 'file', 'js'
-          # file content URI is mandatory
-          if payload[:uri].nil? then
-            valid = false
-          end
-        when 'sql'
+          when 'csv', 'xml', 'json', 'file', 'js'
+            # file content URI is mandatory
+            if payload[:uri].nil? then
+              valid = false
+            end
+          when 'sql'
 
-          # check if database server is available
-          unless database_servers.include? payload[:server] then
-            valid = false
-          end
+            # check if database server is available
+            unless database_servers.include? payload[:server] then
+              valid = false
+            end
 
-          # database username is mandatory
-          if payload[:username].nil? then
-            valid = false
-          end
+            # database username is mandatory
+            if payload[:username].nil? then
+              valid = false
+            end
 
-          # database user password is mandatory
-          if payload[:password].nil? then
-            valid = false
-          end
+            # database user password is mandatory
+            if payload[:password].nil? then
+              valid = false
+            end
 
-          # database name is mandatory
-          if payload[:database].nil? then
-            valid = false
-          end
+            # database name is mandatory
+            if payload[:database].nil? then
+              valid = false
+            end
 
-          # database query is mandatory
-          if payload[:query].nil? then
-            valid = false
-          end
+            # database query is mandatory
+            if payload[:query].nil? then
+              valid = false
+            end
         end
       rescue Exception => e
 

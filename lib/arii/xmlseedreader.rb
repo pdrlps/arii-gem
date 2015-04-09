@@ -17,7 +17,7 @@ module ARII
         @doc.xpath(@seed[:payload][:query]).each do |element|
           begin
             object = @help.deep_copy @agent[:payload]
-            object.each_pair do |key,value|
+            object.each_pair do |key, value|
               variables = @help.identify_variables(object[key])
               variables.each do |v|
                 element.xpath(@seed[:payload][:selectors][v]).each do |el|

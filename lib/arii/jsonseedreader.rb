@@ -16,11 +16,11 @@ module ARII
       begin
         url = RestClient.get @seed[:payload][:uri]
         @doc = url.to_str
-        JsonPath.on(@doc,@seed[:payload][:query]).each do |element|
+        JsonPath.on(@doc, @seed[:payload][:query]).each do |element|
 
           begin
             object = @help.deep_copy @agent[:payload]
-            object.each_pair do |key,value|
+            object.each_pair do |key, value|
               variables = @help.identify_variables(object[key])
               variables.each do |v|
 
@@ -31,7 +31,7 @@ module ARII
               end
             end
 
-            JsonPath.on(element,@seed[:payload][:cache]).each do |el|
+            JsonPath.on(element, @seed[:payload][:cache]).each do |el|
               object[:seed] = el
 
             end
