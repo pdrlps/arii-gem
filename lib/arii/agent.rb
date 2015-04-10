@@ -83,7 +83,7 @@ module ARII
 
         @checkup[:templates] = @d.templates.uniq
       rescue Exception => e
-        ARII::Config.log.error(self.class.name) { "Detection error: #{e}" }
+        ARII::Config.log.error(self.class.name) { "Detection error: #{e}\n\t#{e.backtrace}" }
       end
 
       begin

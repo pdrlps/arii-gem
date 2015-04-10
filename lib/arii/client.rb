@@ -9,7 +9,7 @@ module ARII
     def initialize config, log
       begin
         @config = config
-        ARII::Config.set_access_token config[:server][:api_key]
+        ARII::Config.set_access_token config[:server][:access_token]
         ARII::Config.set_host config[:server][:host]
         ARII::Config.set_log log
 
