@@ -27,41 +27,41 @@ module ARII
       @checkup = {}
 
       case @publisher
-        when 'sql'
-          begin
-            @d = ARII::SQLDetector.new(self)
-          rescue Exception => e
-            @response = {:status => 400, :error => e}
-            ARII::Config.log.error(self.class.name) { "#{e}" }
-          end
-        when 'csv'
-          begin
-            @d = ARII::CSVDetector.new(self)
-          rescue Exception => e
-            @response = {:status => 400, :error => e}
-            ARII::Config.log.error(self.class.name) { "#{e}" }
-          end
-        when 'excel'
-          begin
-            @d = ARII::ExcelDetector.new(self)
-          rescue Exception => e
-            @response = {:status => 400, :error => e}
-            ARII::Config.log.error(self.class.name) { "#{e}" }
-          end
-        when 'xml'
-          begin
-            @d = ARII::XMLDetector.new(self)
-          rescue Exception => e
-            @response = {:status => 400, :error => e}
-            ARII::Config.log.error(self.class.name) { "#{e}" }
-          end
-        when 'json'
-          begin
-            @d = ARII::JSONDetector.new(self)
-          rescue Exception => e
-            @response = {:status => 400, :error => e}
-            ARII::Config.log.error(self.class.name) { "#{e}" }
-          end
+      when 'sql'
+        begin
+          @d = ARII::SQLDetector.new(self)
+        rescue Exception => e
+          @response = {:status => 400, :error => e}
+          ARII::Config.log.error(self.class.name) { "#{e}" }
+        end
+      when 'csv'
+        begin
+          @d = ARII::CSVDetector.new(self)
+        rescue Exception => e
+          @response = {:status => 400, :error => e}
+          ARII::Config.log.error(self.class.name) { "#{e}" }
+        end
+      when 'excel'
+        begin
+          @d = ARII::ExcelDetector.new(self)
+        rescue Exception => e
+          @response = {:status => 400, :error => e}
+          ARII::Config.log.error(self.class.name) { "#{e}" }
+        end
+      when 'xml'
+        begin
+          @d = ARII::XMLDetector.new(self)
+        rescue Exception => e
+          @response = {:status => 400, :error => e}
+          ARII::Config.log.error(self.class.name) { "#{e}" }
+        end
+      when 'json'
+        begin
+          @d = ARII::JSONDetector.new(self)
+        rescue Exception => e
+          @response = {:status => 400, :error => e}
+          ARII::Config.log.error(self.class.name) { "#{e}" }
+        end
       end
 
 
@@ -106,12 +106,14 @@ module ARII
           ARII::Config.log.info(self.class.name) { "Delivering to #{template} template." }
           checkup[:payload].each do |payload|
             ARII::Config.log.debug(self.class.name) { "Processing #{payload}." }
-            response = RestClient.post "#{ARII::Config.host}postman/deliver/#{template}.js", payload
+
+            response = RestClient::Request.execute(:method => 'post', :url => "#{ARII::Config.host}postman/deliver/#{template}.js", :payload => payload ,:verify_ssl => OpenSSL::SSL::VERIFY_NONE )
+
             case response.code
-              when 200
-                ARII::Config.log.debug(self.class.name) { "Delivered to #{template}." }
-              else
-                ARII::Config.log.warn(self.class.name) { "unable to deliver \"#{payload}\" to \"#{template}\"" }
+            when 200
+              ARII::Config.log.debug(self.class.name) { "Delivered to #{template}." }
+            else
+              ARII::Config.log.warn(self.class.name) { "unable to deliver \"#{payload}\" to \"#{template}\"" }
             end
           end
         end

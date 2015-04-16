@@ -27,7 +27,8 @@ module ARII
       begin
         ARII::Config.log.info(self.class.name) { 'Launching validation.' }
 
-        out = RestClient.post "#{ARII::Config.host}fluxcapacitor/validate_key.json", {:access_token => ARII::Config.access_token}
+        out = RestClient::Request.execute(:method => 'post', :url => "#{ARII::Config.host}fluxcapacitor/validate_key.json", :payload => {:access_token => ARII::Config.access_token} ,:verify_ssl => OpenSSL::SSL::VERIFY_NONE )
+
         response = {:status => 100, :response => out.to_str}
       rescue Exception => e
         ARII::Config.log.error(self.class.name) { "Failed validation: #{e}" }
