@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.email = ["hello@pedrolopes.net"]
   spec.summary = %q{arii client library for distributed agents.}
   spec.description = %q{ARiiP: integrate everything. Automated real-time integration & interoperability platform.}
-  spec.homepage = "http://ariip.com/"
-  spec.license = "MIT"
+  spec.homepage = "https://ariip.com//"
+  spec.license = "CC Attribution-NonCommercial-NoDerivatives 4.0 International"
   spec.files = `git ls-files`.split($/)
   spec.executables = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files = spec.files.grep(%r{^(test|spec|features)/})
