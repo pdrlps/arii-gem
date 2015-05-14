@@ -25,4 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rubyXL'
   spec.add_runtime_dependency 'spreadsheet'
   spec.add_runtime_dependency 'jsonpath', '~> 0'
+  spec.add_runtime_dependency 'tiny_tds', '> 0.6.3.rc1'
+  spec.add_runtime_dependency 'pg'
 end
