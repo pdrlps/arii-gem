@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"
 
-  spec.add_runtime_dependency 'rest-client', '~> 0'
+  spec.add_runtime_dependency 'rest-client', '< 3'
   spec.add_runtime_dependency 'nokogiri'
   spec.add_runtime_dependency 'rubyXL'
   spec.add_runtime_dependency 'spreadsheet'
